@@ -1,0 +1,179 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --karate-red: #c8102e;
+  --karate-gold: #d4a017;
+  --dojo-950: #0a0908;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-dojo-950 text-stone-100 font-body antialiased;
+  overflow-x: hidden;
+}
+
+/* ─── Typographie display ─── */
+.font-display {
+  letter-spacing: 0.04em;
+}
+
+/* ─── Backgrounds animés « arts martiaux » ─── */
+.dojo-bg {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.dojo-bg::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  z-index: -2;
+  background:
+    radial-gradient(ellipse 60% 45% at 15% 20%, rgba(200, 16, 46, 0.16), transparent 60%),
+    radial-gradient(ellipse 55% 40% at 85% 75%, rgba(212, 160, 23, 0.12), transparent 60%),
+    radial-gradient(ellipse 40% 30% at 60% 10%, rgba(200, 16, 46, 0.08), transparent 60%);
+  animation: bgDrift 18s ease-in-out infinite alternate;
+}
+.dojo-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 30%, transparent 75%);
+}
+@keyframes bgDrift {
+  from { transform: translate3d(-2%, -1%, 0) scale(1); }
+  to { transform: translate3d(2%, 2%, 0) scale(1.08); }
+}
+
+/* Kanji géant décoratif */
+.kanji-ghost {
+  position: absolute;
+  font-family: serif;
+  font-weight: 900;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.09);
+  user-select: none;
+  pointer-events: none;
+  line-height: 1;
+  animation: kata 9s ease-in-out infinite;
+}
+
+/* Bandeau diagonal */
+.slash-band {
+  clip-path: polygon(0 0, 100% 4vw, 100% 100%, 0 calc(100% - 4vw));
+}
+
+/* ─── Révélation au scroll ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-left { transform: translateX(-46px); }
+.reveal-right { transform: translateX(46px); }
+.reveal-zoom { transform: scale(0.92); }
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ─── Glassmorphisme clair (login iPhone) ─── */
+.glass-light {
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(22px) saturate(1.6);
+  -webkit-backdrop-filter: blur(22px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.glass-input {
+  background: rgba(255, 255, 255, 0.16) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  color: #fff !important;
+}
+.glass-input::placeholder { color: rgba(255, 255, 255, 0.65) !important; }
+.glass-input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.7) !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
+}
+
+/* ─── Protection galerie anti-téléchargement ─── */
+.protected-media {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  position: relative;
+}
+.protected-media img,
+.protected-media video {
+  pointer-events: none; /* bloque le menu contextuel + glisser-déposer */
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.protected-media .shield {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: transparent;
+}
+
+/* ─── Marquee partenaires ─── */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+
+/* ─── Divers ─── */
+.text-stroke-gold {
+  -webkit-text-stroke: 1px rgba(212, 160, 23, 0.65);
+  color: transparent;
+}
+.gold-underline {
+  background-image: linear-gradient(90deg, var(--karate-red), var(--karate-gold));
+  background-size: 100% 3px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+}
+.card-hover {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s, border-color 0.35s;
+}
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(200, 16, 46, 0.25);
+}
+.btn-karate {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl bg-karate-red px-6 py-3 font-semibold text-white transition-all;
+  box-shadow: 0 8px 28px rgba(200, 16, 46, 0.4);
+}
+.btn-karate:hover { @apply bg-karate-darkred; transform: translateY(-2px); }
+.btn-karate:active { transform: translateY(0); }
+.btn-gold {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl bg-karate-gold px-6 py-3 font-semibold text-dojo-950 transition-all;
+  box-shadow: 0 8px 28px rgba(212, 160, 23, 0.35);
+}
+.btn-gold:hover { filter: brightness(1.08); transform: translateY(-2px); }
+.input-dark {
+  @apply w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-white placeholder:text-stone-500 transition;
+}
+.input-dark:focus { @apply border-karate-gold/70 outline-none ring-2 ring-karate-gold/20; }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #14110e; }
+::-webkit-scrollbar-thumb { background: #3a322a; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--karate-red); }
+
+::selection { background: rgba(200, 16, 46, 0.7); color: #fff; }
