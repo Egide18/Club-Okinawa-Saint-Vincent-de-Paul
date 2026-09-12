@@ -1,0 +1,23 @@
+# deps
+node_modules/
+
+# next
+.next/
+out/
+build/
+
+# env
+.env
+.env*.local
+!.env.example
+
+# data (local JSON db + uploads) — persisté via Vercel Postgres/Blob en prod
+data/*.json
+!data/.gitkeep
+public/uploads/*
+!public/uploads/.gitkeep
+
+# misc
+.DS_Store
+*.pem
+.vercel
