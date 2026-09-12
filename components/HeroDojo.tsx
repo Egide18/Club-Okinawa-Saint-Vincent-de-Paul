@@ -22,42 +22,6 @@ export default function HeroDojo({ slogan, paragraphe }: { slogan: string; parag
       {/* Kanji décoratif */}
       <div className="kanji-ghost right-6 top-24 hidden text-[12rem] md:block lg:text-[16rem]">押忍</div>
 
-      {/* ── Karatéka entrant dans le dojo ── */}
-      <motion.div
-        className="pointer-events-none absolute bottom-[8%] left-0 hidden sm:block"
-        initial={{ x: '-15vw', opacity: 0 }}
-        animate={{ x: ['-15vw', '22vw', '22vw'], opacity: [0, 1, 1] }}
-        transition={{ duration: 9, times: [0, 0.45, 1], ease: 'easeInOut' }}
-      >
-        {/* silhouette qui marche : balancement */}
-        <motion.svg viewBox="0 0 120 120" className="h-40 w-40 opacity-80 drop-shadow-[0_0_25px_rgba(200,16,46,0.6)] lg:h-56 lg:w-56"
-          animate={{ y: [0, -6, 0], rotate: [0, 1.5, 0] }}
-          transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <defs>
-            <linearGradient id="hero-gi" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#f5efe4" />
-              <stop offset="100%" stopColor="#8a8175" />
-            </linearGradient>
-          </defs>
-          {/* tête */}
-          <circle cx="60" cy="14" r="9" fill="url(#hero-gi)" />
-          {/* corps gi */}
-          <path d="M48 26h24l4 34h-32z" fill="url(#hero-gi)" />
-          {/* ceinture noire */}
-          <rect x="46" y="56" width="28" height="6" rx="2" fill="#111" />
-          <path d="M62 62l-3 14 4 1 4-14z" fill="#111" />
-          {/* jambes en marche */}
-          <motion.path d="M50 62l-10 30 7 2 11-30z" fill="#e8e0d0"
-            animate={{ rotate: [0, 8, 0, -8, 0] }} transition={{ duration: 1.1, repeat: Infinity }} style={{ transformOrigin: '52px 62px' }} />
-          <motion.path d="M66 62l12 28 7-2-11-28z" fill="#d8d0c0"
-            animate={{ rotate: [0, -8, 0, 8, 0] }} transition={{ duration: 1.1, repeat: Infinity }} style={{ transformOrigin: '66px 62px' }} />
-          {/* bras */}
-          <path d="M48 28L32 52l6 4 14-22z" fill="url(#hero-gi)" />
-          <path d="M70 28l14 10 4-6-12-10z" fill="url(#hero-gi)" />
-        </motion.svg>
-      </motion.div>
-
       {/* Torii stylisé à droite */}
       <motion.svg
         viewBox="0 0 200 160"

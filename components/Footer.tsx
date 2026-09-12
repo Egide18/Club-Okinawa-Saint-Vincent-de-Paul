@@ -104,6 +104,17 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-stone-500 sm:flex-row sm:px-6">
           <span>© {year} Club Okinawa Saint-Vincent-de-Paul. Tous droits réservés.</span>
+          <span>
+            Développé par{' '}
+            <a
+              href="https://portfolio-egide.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-karate-gold transition hover:text-white hover:underline"
+            >
+              4flowers
+            </a>
+          </span>
           <span className="font-display tracking-[0.25em] text-stone-600">押忍 — OSU ! 🥋</span>
         </div>
       </div>
