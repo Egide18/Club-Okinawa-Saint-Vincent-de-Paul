@@ -13,7 +13,7 @@ Site officiel du club de **karaté & full contact** — Next.js 14, responsive, 
 | **Contact** | Formulaire + bouton **WhatsApp** relié au numéro du club |
 | **Admin** | Connexion glassmorphisme sur fond **Matrix**, mot de passe **bcrypt**, tableau de bord : galerie (upload direct), pré-inscriptions (codes, photos, fiches), messages, **logs de connexion** (date/heure/IP/appareil), réglages du site |
 
-**Thème jour/nuit** : bascule Soleil/Lune dans la navigation, mémorisé localement, respecte le réglage du système au premier passage.
+**Thème jour/nuit** : sombre par défaut, bascule Soleil/Lune dans la navigation, choix mémorisé localement.
 
 Conformité : **RGPD** (consentements, droits, durées), bandeau **cookies**, **mentions légales**, footer complet, collecte du **type de téléphone** (mobile/tablette/desktop + modèle).
 
@@ -56,7 +56,7 @@ npm run dev
 ## 🔒 Sécurité
 
 - bcrypt (12 rounds), JWT HS256 httpOnly/secure/sameSite, rate-limit login (5 essais → 15 min)
-- Validation serveur : types MIME + extensions + tailles (docs 5 Mo, galerie 100 Mo)
+- Validation serveur : types MIME + extensions + tailles (photo candidat 5 Mo, galerie : 5 Mo/photo, 50 Mo/vidéo avec envoi direct Vercel Blob)
 - En-têtes : CSP, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy
 - Journalisation de chaque tentative de connexion (succès/échec, IP, appareil)
 

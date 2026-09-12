@@ -5,7 +5,9 @@ import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
 import ThemeProvider from '@/components/ThemeProvider';
 
-const THEME_INIT = `(function(){try{var t=localStorage.getItem('okinawa_theme');if(!t){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}if(t==='light'){document.documentElement.classList.add('light');}}catch(e){}})();`;
+// Thème sombre (version d'origine) par défaut ; le mode jour ne s'active
+// que si le visiteur l'a explicitement choisi (mémorisé localement).
+const THEME_INIT = `(function(){try{if(localStorage.getItem('okinawa_theme')==='light'){document.documentElement.classList.add('light');}}catch(e){}})();`;
 
 export const metadata: Metadata = {
   title: {

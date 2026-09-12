@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ChevronRight, Play } from 'lucide-react';
 
 /**
- * Hero : karatéka entrant dans le dojo (silhouette animée traversant l'écran),
+ * Hero : dojo cinématique (fond 4K, torii, kanjis),
  * slogan du club + paragraphe modifiable depuis l'admin.
  */
 export default function HeroDojo({ slogan, paragraphe }: { slogan: string; paragraphe: string }) {

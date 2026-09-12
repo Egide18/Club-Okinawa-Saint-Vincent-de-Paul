@@ -82,7 +82,7 @@ function LoginForm() {
 
         <form onSubmit={submit} className="mt-6 space-y-4">
           <label className="block">
-            <span className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-white/85">
+            <span className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-white/80">
               Nom d’utilisateur
             </span>
             <span className="relative block">
@@ -99,7 +99,7 @@ function LoginForm() {
           </label>
 
           <label className="block">
-            <span className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-white/85">
+            <span className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-white/80">
               Mot de passe
             </span>
             <span className="relative block">

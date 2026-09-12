@@ -268,17 +268,53 @@ function GalleryManager({ items, setItems, notify }: {
   const [uploading, setUploading] = useState(false);
   const [mode, setMode] = useState<'file' | 'url'>('file');
 
+  /** Contrôle local : photo 5 Mo max, vidéo 50 Mo max. */
+  function checkLocal(f: File): string | null {
+    const isImage = ['image/jpeg', 'image/png', 'image/webp'].includes(f.type);
+    const isVideo = ['video/mp4', 'video/webm'].includes(f.type);
+    if (!isImage && !isVideo) return 'Format refusé (photos JPG/PNG/WebP, vidéos MP4/WebM).';
+    if (isImage && f.size > 5 * 1024 * 1024) {
+      return `Photo trop lourde (${(f.size / 1048576).toFixed(1)} Mo) : 5 Mo maximum par photo.`;
+    }
+    if (isVideo && f.size > 50 * 1024 * 1024) {
+      return `Vidéo trop lourde (${(f.size / 1048576).toFixed(0)} Mo) : 50 Mo maximum par vidéo.`;
+    }
+    return null;
+  }
+
   async function upload() {
     if (!title.trim()) return notify(false, 'Donnez un titre au média.');
     if (mode === 'file' && !file) return notify(false, 'Choisissez un fichier image ou vidéo.');
     if (mode === 'url' && !/^https:\/\//.test(url)) return notify(false, 'URL invalide (https requise).');
+    if (mode === 'file' && file) {
+      const err = checkLocal(file);
+      if (err) return notify(false, err);
+    }
     setUploading(true);
     try {
+      let mediaUrl = mode === 'url' ? url : '';
+      // Envoi direct vers Vercel Blob si configuré (requis pour les vidéos > 4,5 Mo),
+      // sinon envoi classique via le serveur.
+      if (mode === 'file' && file) {
+        let useBlob = false;
+        try {
+          const st = await fetch('/api/storage', { cache: 'no-store' }).then((r) => r.json());
+          useBlob = st.blob === true;
+        } catch { /* repli serveur */ }
+        if (useBlob) {
+          const { upload: blobUpload } = await import('@vercel/blob/client');
+          const blob = await blobUpload(`galerie/${Date.now()}-${file.name}`, file, {
+            access: 'public',
+            handleUploadUrl: '/api/blob-token',
+          });
+          mediaUrl = blob.url;
+        }
+      }
       const fd = new FormData();
       fd.append('title', title);
       fd.append('description', description);
-      if (mode === 'file' && file) fd.append('file', file);
-      if (mode === 'url') fd.append('url', url);
+      if (mediaUrl) fd.append('url', mediaUrl);
+      else if (file) fd.append('file', file);
       const res = await fetch('/api/gallery', { method: 'POST', body: fd });
       const data = await res.json();
       if (res.ok) {
@@ -287,7 +323,7 @@ function GalleryManager({ items, setItems, notify }: {
         notify(true, 'Média ajouté à la galerie.');
       } else notify(false, data.error || 'Échec de l’envoi.');
     } catch {
-      notify(false, 'Erreur réseau.');
+      notify(false, 'Erreur réseau pendant l’envoi.');
     }
     setUploading(false);
   }
@@ -303,7 +339,7 @@ function GalleryManager({ items, setItems, notify }: {
 
   return (
     <div>
-      <div className="rounded-2xl border border-karate-gold/25 bg-gradient-to-b from-karate-gold/8 to-transparent p-6">
+      <div className="rounded-2xl border border-karate-gold/25 bg-gradient-to-b from-karate-gold/10 to-transparent p-6">
         <h3 className="flex items-center gap-2 font-display text-2xl tracking-wider text-white">
           <Plus className="h-5 w-5 text-karate-gold" /> AJOUTER UN MÉDIA
         </h3>
@@ -323,8 +359,8 @@ function GalleryManager({ items, setItems, notify }: {
           {mode === 'file' ? (
             <label className="block cursor-pointer rounded-2xl border border-dashed border-white/25 bg-black/30 p-6 text-center transition hover:border-karate-gold/60">
               <Upload className="mx-auto h-8 w-8 text-karate-gold" />
-              <p className="mt-2 text-sm text-stone-300">{file ? <strong className="text-white">{file.name}</strong> : 'Cliquez pour choisir une image (JPG/PNG/WebP) ou vidéo (MP4/WebM)'}</p>
-              <p className="text-xs text-stone-500">Max 100 Mo — stocké sur Vercel Blob en production</p>
+              <p className="mt-2 text-sm text-stone-300">{file ? <strong className="text-white">{file.name} ({(file.size / 1048576).toFixed(1)} Mo)</strong> : 'Cliquez pour choisir une photo (JPG/PNG/WebP) ou une vidéo (MP4/WebM)'}</p>
+              <p className="text-xs text-stone-500">Photo : 5 Mo max • Vidéo : 50 Mo max — stocké sur Vercel Blob en production</p>
               <input type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" className="hidden" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
             </label>
           ) : (

@@ -5,7 +5,8 @@ export const ALLOWED_DOC_MIMES = ['image/jpeg', 'image/png', 'image/jpg', 'appli
 export const ALLOWED_DOC_EXTS = ['jpg', 'jpeg', 'png', 'pdf'];
 export const ALLOWED_GALLERY_IMAGE = ['image/jpeg', 'image/png', 'image/webp'];
 export const ALLOWED_GALLERY_VIDEO = ['video/mp4', 'video/webm'];
-export const MAX_GALLERY_BYTES = 100 * 1024 * 1024; // 100 Mo vidéo
+export const MAX_PHOTO_BYTES = 5 * 1024 * 1024; // 5 Mo par photo
+export const MAX_VIDEO_BYTES = 50 * 1024 * 1024; // 50 Mo par vidéo
 
 export function extOf(name: string): string {
   return (name.split('.').pop() || '').toLowerCase();
@@ -44,10 +45,13 @@ export function checkGalleryFile(file: File): FileCheck {
   const isImage = ALLOWED_GALLERY_IMAGE.includes(file.type);
   const isVideo = ALLOWED_GALLERY_VIDEO.includes(file.type);
   if (!isImage && !isVideo) {
-    return { ok: false, error: `"${file.name}" : format refusé (images JPG/PNG/WebP, vidéos MP4/WebM).` };
+    return { ok: false, error: `"${file.name}" : format refusé (photos JPG/PNG/WebP, vidéos MP4/WebM).` };
   }
-  if (file.size > MAX_GALLERY_BYTES) {
-    return { ok: false, error: `"${file.name}" dépasse 100 Mo.` };
+  if (isImage && file.size > MAX_PHOTO_BYTES) {
+    return { ok: false, error: `Photo trop lourde (${(file.size / 1048576).toFixed(1)} Mo) : 5 Mo maximum par photo.` };
+  }
+  if (isVideo && file.size > MAX_VIDEO_BYTES) {
+    return { ok: false, error: `Vidéo trop lourde (${(file.size / 1048576).toFixed(0)} Mo) : 50 Mo maximum par vidéo.` };
   }
   return { ok: true };
 }
